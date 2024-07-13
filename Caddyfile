@@ -35,4 +35,13 @@
 	# if path doesn't exist, redirect it to 'index.html' for client side routing
 	try_files {path} /index.html
 
+	# reverse proxy for API requests
+	handle_path /api/* {
+		reverse_proxy https://fastapi-postgres-gh-production.up.railway.app {
+			header_up Host {host}
+			header_up X-Real-IP {remote}
+			header_up X-Forwarded-For {remote}
+			header_up X-Forwarded-Proto {scheme}
+		}
+	}
 }
